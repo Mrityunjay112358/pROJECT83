@@ -1,68 +1,97 @@
-event_mouse = "empty";
-var last_position_of_X,last_position_of_Y;
-my_canvas = document.getElementById("myCanvas");
-ctx = canvas.getContext("2d");
+var mouseEvent = "empty";
+var last_position_of_x, last_position_of_y;
 
-color;
-width_of_the_line;
-
-canvas.addEventListener("mousedown",mymousedown);
-function mymousedown(e){
-    event_mouse = "mousedown";
-    color = document.getElementById("colorin");
-    width_of_the_line = document.getElementById("widthin");
-}
-canvas.addEventListener("mouseup",mymouseup);
-function mymouseup(e){
-    event_mouse = "mouseup";
-}
-canvas.addEventListener("mouseleave",mymouseleave);
-function mymouseleave(e){
-    event_mouse = "mouseleave";
-}
-canvas.addEventListener("mousemove",mymousemove);
-function mymousemove(e){
-    current_position_of_mouse_X = e.clientX - canvas.offsetLeft;
-    current_position_of_mouse_Y = e.clientY  - canvas.offsetTop;
- if(event_mouse == "mousedown")
- {
-     ctx.beginPath();
-     ctx.strokestyle= color;
-     ctx.lineWidth=width_of_the_line;
-     console.log("Last Position of X and Y cordinates = ");
-     console.log("x= "+last_position_of_X+"y= "+last_position_of_Y);
-     ctx.moveTo(last_position_of_X,last_position_of_Y);
-     ctx.lineTo(current_position_of_mouse_X,current_position_of_mouse_Y);
-     ctx.stroke();
- }
- last_position_of_X = current_position_of_mouse_X;
- last_position_of_Y = current_position_of_mouse_Y;
-}
-
-canvas.addEventListener("touchstart", my_touchstart);
+    canvas = document.getElementById('myCanvas');
+    ctx = canvas.getContext("2d");
     
-    function my_touchstart(e)
+    color = "black";
+    width_of_line = 1;
+
+    canvas.addEventListener("mousedown", my_mousedown);
+    
+    function my_mousedown(e)
     {
-        last_position_of_x_touch = e.touches[0].clientX-canvas.offsetLeft;
-        last_position_of_y_touch = e.touches[0].clientY-canvas.offsetTop;
+        color = document.getElementById("color").value;
+        width_of_line = document.getElementById("width_of_line").value;
+        
+
+        mouseEvent = "mouseDown";
     }
 
-canvas.addEventListener("touchmove", my_touchmove);
-    function my_touchmove(e)
+    canvas.addEventListener("mousemove", my_mousemove);
+    function my_mousemove(e)
     {
-         current_position_of_touch_x = e.touches[0].clientX - canvas.offsetLeft;
-         current_position_of_touch_y = e.touches[0].clientY - canvas.offsetTop;
+        current_position_of_mouse_x = e.clientX - canvas.offsetLeft;
+        current_position_of_mouse_y = e.clientY - canvas.offsetTop;
 
-        
+        if (mouseEvent == "mouseDown") {
         ctx.beginPath();
         ctx.strokeStyle = color;
         ctx.lineWidth = width_of_line;
-        ctx.moveTo(last_position_of_x_touch, last_position_of_y_touch);
-        ctx.lineTo(current_position_of_touch_x, current_position_of_touch_y);
+        ctx.moveTo(last_position_of_x, last_position_of_y);
+        ctx.lineTo(current_position_of_mouse_x, current_position_of_mouse_y);
         ctx.stroke();
-    
-        last_position_of_x_touch = current_position_of_touch_x; 
-        last_position_of_y_touch = current_position_of_touch_y;
+        }
+
+        last_position_of_x = current_position_of_mouse_x; 
+        last_position_of_y = current_position_of_mouse_y;
     }
 
-    
+    canvas.addEventListener("mouseup", my_mouseup);
+    function my_mouseup(e)
+    {
+        mouseEvent = "mouseUP";
+    }
+
+    canvas.addEventListener("mouseleave", my_mouseleave);
+    function my_mouseleave(e)
+    {
+        mouseEvent = "mouseleave";
+    }
+
+var last_position_of_touch_x, last_position_of_touch_y;
+var width = screen.width;
+
+new_width =  screen.width - 70; 
+new_height = screen.height - 300;
+    if(width < 992)
+    {
+    document.getElementById("myCanvas").width = new_width;
+    document.getElementById("myCanvas").height = new_height;
+    document.body.style.overflow = "hidden";
+    }
+    canvas.addEventListener("touchstart", my_touchstart);
+
+function my_touchstart(e) 
+{
+    console.log("my_touchstart");
+
+  color = document.getElementById("color").value;
+  width_of_line = document.getElementById("width_of_line").value;
+
+         
+    last_position_of_touch_x = e.touches[0].clientX - canvas.offsetLeft;
+    last_position_of_touch_y = e.touches[0].clientY - canvas.offsetTop;
+}
+
+canvas.addEventListener("touchmove", my_touchmove);
+
+function my_touchmove(e) 
+{
+    current_position_of_touch_x = e.touches[0].clientX - canvas.offsetLeft;
+    current_position_of_touch_y = e.touches[0].clientY - canvas.offsetTop;
+    ctx.beginPath();
+    ctx.strokeStyle = color;
+    ctx.lineWidth = width_of_line;
+    ctx.moveTo(last_position_of_touch_x, last_position_of_touch_y);
+    ctx.lineTo(current_position_of_touch_x, current_position_of_touch_y);
+    ctx.stroke();
+
+    last_position_of_touch_x = current_position_of_touch_x; 
+    last_position_of_touch_y = current_position_of_touch_y;
+   
+}
+
+function clearArea() {
+    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height);
+}
